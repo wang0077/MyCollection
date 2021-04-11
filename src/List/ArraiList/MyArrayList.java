@@ -181,7 +181,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
 
     @Override
     public E get(int index) {
-        return null;
+        return elementData(index);
     }
 
     @Override
