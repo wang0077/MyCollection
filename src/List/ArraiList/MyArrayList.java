@@ -58,7 +58,22 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         this.elementData = ELSE_EMPTY_ARRAY;
     }
 
+    /**
+     * 将传入的集合数据添加到新的ArrayList
+     * @param c 旧的集合数据
+     */
+    public MyArrayList(Collection<? extends E> c){
+        this.elementData = c.toArray();
+        size = elementData.length;
+        if(size == 0){
+            this.elementData = EMPTY_ARRAY;
+        }
+    }
 
+    /**
+     * 在数组末端添加数据
+     * @param e Data
+     */
     @Override
     public boolean add(E e) {
         ensureCapacityInternal(size + 1);
@@ -66,6 +81,11 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         return true;
     }
 
+    /**
+     * 删除指定位置的Data
+     * @param index 指定数组位置
+     * @return 返回删除的Data
+     */
     @Override
     public E remove(int index) {
         rangeCheckForAdd(index);
@@ -74,6 +94,10 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         return old;
     }
 
+    /**
+     * 删除数组的指定数据,如果有多个数据，删除最前的一个数据
+     * @param o 需要删除的数据
+     */
     @Override
     public boolean remove(Object o) {
         if(o == null){
@@ -94,6 +118,10 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         return false;
     }
 
+    /**
+     * 快速删除，如果在数组中间的位置删除的话，对数组空隙进行移动
+     * @param index 如果删除的数组下标
+     */
     private void fastRemove(int index){
         if (index != size - 1) {
             for (int i = index; i < size - 1; i++) {
@@ -103,11 +131,21 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         elementData[--size] = null;
     }
 
+    /**
+     * 获取指定下标的数组元素
+     * @param index 指定下标
+     * @return 数组元素
+     */
     @SuppressWarnings("unchecked")
     private E elementData(int index){
         return (E) elementData[index];
     }
 
+    /**
+     * 在数组的指定位置添加数据
+     * @param index 指定的数组下标
+     * @param element Data
+     */
     @Override
     public void add(int index, E element) {
         rangeCheckForAdd(index);
@@ -123,7 +161,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
 
     /**
      * 检查添加的位置是否越界
-     * @param index
+     * @param index 指定的下标
      */
     public void rangeCheckForAdd(int index){
         if(index > size || index < 0){
@@ -169,13 +207,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         elementData = Arrays.copyOf(elementData,cur);
     }
 
-    public MyArrayList(Collection<? extends E> c){
-        this.elementData = c.toArray();
-        size = elementData.length;
-        if(size == 0){
-            this.elementData = EMPTY_ARRAY;
-        }
-    }
+
 
 
 
