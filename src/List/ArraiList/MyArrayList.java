@@ -153,7 +153,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E>,Cloneable
         Object temp = element;
         size++;
         for(int i = index;i < size;i++){
-            Object temp1 = elementData[index];
+            Object temp1 = elementData[i];
             elementData[i] = temp;
             temp = temp1;
         }
