@@ -1,5 +1,7 @@
 package List.LinkedList;
 
+import sun.plugin2.applet.context.NoopExecutionContext;
+
 import java.util.*;
 
 /**
@@ -185,34 +187,109 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
         return element;
     }
 
+    /**
+     * 删除指定元素并返回
+     */
+    E unlink(Node<E> node){
+        final E element = node.item;
+        final Node<E> next = node.next;
+        final Node<E> prev = node.prev;
+
+        if(prev == null){
+            head = next;
+        }else{
+            prev.next = next;
+            node.next = null;
+        }
+
+        if(next == null){
+            tail = prev;
+        }else{
+            next.prev = prev;
+            node.prev = null;
+        }
+        node.item = null;
+        size--;
+        return element;
+    }
+
+    /**
+     *  删除链表中第一个的指定元素
+     */
+    @Override
+    public boolean remove(Object o) {
+        if(o == null){
+            for(Node<E> node = head;node != null;node = node.next){
+                if(node.item == o){
+                    unlink(node);
+                    return true;
+                }
+            }
+        }else {
+            for (Node<E> node = head;node != null;head = head.next){
+                if(o.equals(node.item)){
+                    unlink(node);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public ListIterator<E> listIterator(int index) {
         return null;
     }
 
+    /**
+     *  队列操作
+     *  数据插入队首
+     *  无返回值的
+     */
     @Override
     public void addFirst(E e) {
         linkFirst(e);
     }
 
+    /**
+     *  队列操作
+     *  数据插入队尾
+     *  无返回值
+     */
     @Override
     public void addLast(E e) {
         linkLast(e);
     }
 
+    /**
+     *  队列操作
+     *  数据插入队首
+     *  有返回值，返回操作是否成功
+     */
     @Override
     public boolean offerFirst(E e) {
         addFirst(e);
         return true;
     }
 
+
+    /**
+     *  队列操作
+     *  数据插入队尾
+     *  有返回值，返回操作是否成功
+     */
     @Override
     public boolean offerLast(E e) {
         addLast(e);
         return true;
     }
 
+
+    /**
+     *  队列操作
+     *  数据移除队首
+     *  有返回值，返回移除的元素
+     */
     @Override
     public E removeFirst() {
         final Node<E> h = head;
@@ -222,6 +299,12 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
         return unlinkFirst(h);
     }
 
+
+    /**
+     *  队列操作
+     *  数据移除队尾
+     *  有返回值，返回移除的数据
+     */
     @Override
     public E removeLast() {
         final Node<E> t = tail;
@@ -231,84 +314,180 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
         return unlinkLast(t);
     }
 
+    /**
+     *  队列操作
+     *  获取队列的队首,并移除
+     */
     @Override
     public E pollFirst() {
-        return null;
+        Node<E> node = head;
+        return node == null ? null : unlinkFirst(node);
     }
 
+    /**
+     *  队列操作
+     *  获取队列的队尾，并移除
+     */
     @Override
     public E pollLast() {
-        return null;
+        Node<E> node = tail;
+        return node == null ? null : unlinkLast(node);
     }
 
+    /**
+     *  队列操作
+     *  获取队列的队首，不移除
+     */
     @Override
     public E getFirst() {
-        return null;
+        Node<E> node = head;
+        if(node == null){
+            throw new NoSuchElementException();
+        }
+        return node.item;
     }
 
+    /**
+     *  队列操作
+     *  获取队列的队尾，不移除
+     */
     @Override
     public E getLast() {
-        return null;
+        Node<E> node = tail;
+        if(tail == null){
+            throw new NoSuchElementException();
+        }
+        return node.item;
     }
 
+    /**
+     *  队列操作
+     *  获取队列的队首，不移除，如果为null不抛出异常
+     */
     @Override
     public E peekFirst() {
-        return null;
+        Node<E> node = head;
+        return node == null ? null : node.item;
     }
 
+    /**
+     *  队列操作
+     *  获取队列的队尾，不移除，如果为null不抛出异常
+     */
     @Override
     public E peekLast() {
-        return null;
+        Node<E> node = tail;
+        return tail == null ? null : node.item;
     }
 
+    /**
+     *  从头结点开始遍历，寻找指定元素，并删除。如果没有找到不发生改变
+     */
     @Override
     public boolean removeFirstOccurrence(Object o) {
-        return false;
+        return remove(o);
     }
 
+    /**
+     *  从尾结点开始遍历，寻找指定元素，并删除。如果没有找到不发生改变
+     */
     @Override
     public boolean removeLastOccurrence(Object o) {
+        if(o == null){
+            for (Node<E> node = tail;node != null;node = node.prev){
+                if(node.item == null){
+                    unlink(node);
+                    return true;
+                }
+            }
+        }else{
+            for (Node<E> node = tail;node != null;node = node.prev){
+                if(o.equals(node.item)){
+                    unlink(node);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
+
+
+    /**
+     *  将元素追加至队尾
+     */
+    @Override
+    public boolean add(E e) {
+        linkLast(e);
+        return true;
+    }
+
+    /**
+     * 将元素追加在队尾
+     */
     @Override
     public boolean offer(E e) {
-        return false;
+        return add(e);
     }
 
+    /**
+     * 删除队首元素并返回
+     */
     @Override
     public E remove() {
-        return null;
+        return removeFirst();
     }
 
+    /**
+     *  队列操作
+     *  获取队首元素，并移除
+     */
     @Override
     public E poll() {
-        return null;
+        Node<E> node = head;
+        return node == null ? null : node.item;
     }
 
+    /**
+     *  队列操作
+     *  检索队首元素，但是不删除
+     */
     @Override
     public E element() {
-        return null;
+        return getFirst();
     }
 
+    /**
+     *  队列操作
+     *  获取队首元素，如果为null不抛出异常
+     */
     @Override
     public E peek() {
-        return null;
+        Node<E> node = head;
+        return node == null ? null : node.item;
     }
 
+    /**
+     *  栈操作
+     *  入栈操作
+     */
     @Override
     public void push(E e) {
-
+        addFirst(e);
     }
 
+    /**
+     *  栈操作
+     *  出栈操作
+     */
     @Override
     public E pop() {
-        return null;
+        return removeFirst();
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
