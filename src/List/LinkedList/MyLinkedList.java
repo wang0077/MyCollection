@@ -1,8 +1,5 @@
 package List.LinkedList;
 
-import sun.plugin2.applet.context.NoopExecutionContext;
-
-import javax.xml.bind.NotIdentifiableEvent;
 import java.util.*;
 
 /**
@@ -402,6 +399,76 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
         checkElementIndex(index);
         return unlink(node(index));
     }
+
+    /**
+     *  查找元素在列表第一次出现的索引下标
+     * @param o 需要查找的元素
+     * @return  返回对应的索引下标，如果找不到的返回-1
+     */
+    @Override
+    public int indexOf(Object o) {
+        int index = 0;
+        if(o == null){
+            for(Node<E> node = head;node != null;node = node.next){
+                if(node.item == null){
+                    return index;
+                }
+                index++;
+            }
+        }else {
+            for(Node<E> node = head;node != null;node = node.next){
+                if(o.equals(node.item)){
+                    return index;
+                }
+                index++;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     *  查找元素在列表最后一次出现的索引下标
+     * @param o 需要查找的元素
+     * @return 返回对应的索引下标，如果没有找到返回-1
+     */
+    @Override
+    public int lastIndexOf(Object o) {
+        int index = size;
+        if(o == null){
+            for(Node<E> node = tail;node != null;node = node.prev){
+                index--;
+                if(node.item == null){
+                    return index;
+                }
+            }
+        }else {
+            for (Node<E> node = tail;node != null;node = node.prev){
+                index--;
+                if(o.equals(node.item)){
+                    return index;
+                }
+            }
+        }
+        return  -1;
+    }
+
+    /**
+     *  清空的链表
+     */
+    @Override
+    public void clear() {
+        for(Node<E> node = head;node != null;){
+            Node<E> next = node.next;
+            node.item = null;
+            node.prev = null;
+            node.next = null;
+            node = next;
+        }
+        tail = null;
+        head = null;
+        size = 0;
+    }
+
 
 
     /**
