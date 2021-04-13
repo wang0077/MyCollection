@@ -2,6 +2,7 @@ package List.LinkedList;
 
 import sun.plugin2.applet.context.NoopExecutionContext;
 
+import javax.xml.bind.NotIdentifiableEvent;
 import java.util.*;
 
 /**
@@ -150,6 +151,22 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
         }
         size++;
     }
+
+    /**
+     *  在succ前插入元素e
+     */
+    void linkBefore(E e,Node<E> succ){
+        Node<E> prev = succ.prev;
+        Node<E> node = new Node<>(e,succ,prev);
+        succ.prev = node;
+        if(prev == null){
+            head = node;
+        }else{
+            prev.next = node;
+        }
+        size++;
+    }
+
 
     /**
      * 删除头结点
@@ -333,6 +350,74 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
         Node<E> node = tail;
         return node == null ? null : unlinkLast(node);
     }
+
+    /**
+     *  通过index获取该位置上的元素
+     * @param index 需要获取元素的下标位置
+     * @return  返回该下标位置的元素
+     */
+    @Override
+    public E get(int index) {
+        checkElementIndex(index);
+        return node(index).item;
+    }
+
+    /**
+     *  将index位置上的element进行替换
+     * @param index 需要替换的下标
+     * @param element 替换的新元素
+     * @return 返回被替换前这个位置的元素
+     */
+    @Override
+    public E set(int index, E element) {
+        checkElementIndex(index);
+        Node<E> node = node(index);
+        E old = node.item;
+        node.item = element;
+        return old;
+    }
+
+    /**
+     *  在index的插入element元素
+     * @param index 插入元素的位置
+     * @param element 要插入的元素
+     */
+    @Override
+    public void add(int index, E element) {
+        checkElementIndex(index);
+        if(index == size){
+            addLast(element);
+        }else{
+            linkBefore(element,node(index));
+        }
+    }
+
+    /**
+     *  删除index标记位置上的元素
+     * @param index 需要删除的元素索引下标
+     * @return 返回被删除的元素
+     */
+    @Override
+    public E remove(int index) {
+        checkElementIndex(index);
+        return unlink(node(index));
+    }
+
+
+    /**
+     * 检查index的索引下标是否越界
+     * @param index 需要检查的下标索引
+     */
+    private void checkElementIndex(int index){
+        if(!isElementIndex(index)){
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    private boolean isElementIndex(int index){
+        return index >= 0 && index <= size;
+    }
+
 
     /**
      *  队列操作
