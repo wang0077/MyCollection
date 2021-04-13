@@ -234,13 +234,13 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
     public boolean remove(Object o) {
         if(o == null){
             for(Node<E> node = head;node != null;node = node.next){
-                if(node.item == o){
+                if(node.item == null){
                     unlink(node);
                     return true;
                 }
             }
         }else {
-            for (Node<E> node = head;node != null;head = head.next){
+            for (Node<E> node = head;node != null;node = head.next){
                 if(o.equals(node.item)){
                     unlink(node);
                     return true;
