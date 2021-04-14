@@ -252,7 +252,7 @@ public class MyLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        return  null;
     }
 
     /**
